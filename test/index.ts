@@ -5,17 +5,20 @@ import fs = require("fs");
 import csvdb = require("../src");
 
 const EXISTINGFILECONTENT = "foo;bar\na;b\nc;d";
+const CUSTOMDELIMFILECONTENT = "foo$bar\na$b\nc$d";
 const INVALIDFILECONTENT = "foo;bar\n1;2;3";
 
 mockfs({
   fixtures: {
     "db.csv": EXISTINGFILECONTENT,
+    "custom.csv": CUSTOMDELIMFILECONTENT,
     "invalid.csv": INVALIDFILECONTENT
   }
 });
 
 const NEWFILE = "fixtures/new.csv";
 const EXISTINGFILE = "fixtures/db.csv";
+const CUSTOMDELIMFILE = "fixtures/custom.csv";
 const INVALIDFILE = "fixtures/invalid.csv";
 const MODEL = ["foo", "bar"];
 
@@ -27,6 +30,7 @@ describe("database init", () => {
     const contents = fs.readFileSync(NEWFILE).toString();
     assert.deepEqual(contents, "foo;bar");
   });
+
   it("should read a valid CSV without throwing error", async () => {
     try {
       await csvdb(EXISTINGFILE, MODEL);
@@ -34,6 +38,7 @@ describe("database init", () => {
       throw new Error("csv is valid but not read");
     }
   });
+
   it("should error when reading an invalid CSV", async () => {
     try {
       await csvdb(INVALIDFILE, MODEL);
@@ -42,12 +47,18 @@ describe("database init", () => {
     }
     throw new Error("file is invalid but has been validated");
   });
-  it("should check options", async () => {});
 });
 
 describe("database behavior - read", () => {
   it("should find all data", async () => {
     const db = await csvdb(EXISTINGFILE, MODEL);
+    const values = await db.get();
+
+    assert.deepEqual(values, [{ foo: "a", bar: "b" }, { foo: "c", bar: "d" }]);
+  });
+
+  it("should find all data - custom delimiter", async () => {
+    const db = await csvdb(CUSTOMDELIMFILE, MODEL, "$");
     const values = await db.get();
 
     assert.deepEqual(values, [{ foo: "a", bar: "b" }, { foo: "c", bar: "d" }]);
@@ -83,18 +94,6 @@ describe("database behavior - create | update | delete", () => {
     assert.deepEqual(oldValue, []);
     assert.deepEqual(newValue, [{ foo: "x", bar: "y" }]);
   });
-
-  /*
-  it("should edit multiple data - lock file system", async () => {
-    const db = await csvdb(EXISTINGFILE, MODEL);
-    const editedValue = await db.edit({ foo: "a" }, { foo: "x" });
-    const newValue = await db.get({ foo: "x" });
-    const oldValue = await db.get({ foo: "a" });
-
-    assert.deepEqual(editedValue, { foo: "x", bar: "b" });
-    assert.deepEqual(oldValue, []);
-    assert.deepEqual(newValue, [{ foo: "x", bar: "b" }]);
-  });*/
 
   it("should return nothing when editing non existent data", async () => {
     const db = await csvdb(EXISTINGFILE, MODEL);

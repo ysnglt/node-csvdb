@@ -18,6 +18,7 @@ const erase = async (parser, predicate) => {
   const csvData = await read(parser);
   const { deleted, filtered } = deleteData(csvData, predicate);
 
+  // recreating csv without deleted data
   await createUtils.create(parser, filtered);
   return deleted;
 };

@@ -1,21 +1,26 @@
 {
   "name": "csvdb",
   "version": "0.0.9",
-  "description": "lightweight and minimalist CSV database",
+  "description": "lightweight flat file CSV database",
   "main": "src/index.ts",
   "dependencies": {
-    "fast-csv": "^2.4.1",
-    "typescript": "^2.6.2"
+    "fast-csv": "^2.4.1"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.44",
     "@types/mock-fs": "^3.6.30",
     "@types/node": "^8.0.53",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-json-editor": "^2.2.1",
+    "gulp-typescript": "^3.2.3",
     "mocha": "^4.0.1",
     "mock-fs": "^4.4.2",
-    "ts-node": "^4.0.2"
+    "ts-node": "^4.0.2",
+    "typescript": "^2.6.2"
   },
   "scripts": {
+    "prepare": "gulp",
     "test": "mocha -r ts-node/register test/index.ts"
   },
   "author": "",

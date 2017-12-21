@@ -4,17 +4,16 @@ import util = require("util");
 
 import { ICSVEditor, IReadEvents } from "../csv-factory/types";
 
-const fileExists = util.promisify(fs.exists);
+const doesFileExist = util.promisify(fs.exists);
 const createFile = util.promisify(fs.writeFile);
 
-const createIfNeeded = async (
+const createFileIfNotExist = async (
   filename: string,
   model: string[],
   delimiter: string
 ) => {
   try {
-    const exists = await fileExists(filename);
-    if (!exists) {
+    if (!await doesFileExist(filename)) {
       const headers = model.reduce((header, cell) => header + delimiter + cell);
       await createFile(filename, headers);
     }
@@ -36,7 +35,7 @@ const validate = async (parser: ICSVEditor, model: string[]) => {
 };
 
 const initDb = async (filename: string, model: string[], delimiter, parser) => {
-  await createIfNeeded(filename, model, delimiter);
+  await createFileIfNotExist(filename, model, delimiter);
   await validate(parser, delimiter);
 };
 
