@@ -135,13 +135,14 @@ describe("database behavior - create | update | delete", () => {
 
   it("should add data", async () => {
     const db = await csvdb(EXISTINGFILE, MODEL);
-    await db.add({ foo: "z", bar: "p" });
+    await db.add([{ foo: "x", bar: "x" }, { foo: "y", bar: "y" }]);
     const values = await db.get();
 
     assert.deepEqual(values, [
       { foo: "a", bar: "b" },
       { foo: "c", bar: "d" },
-      { foo: "z", bar: "p" }
+      { foo: "x", bar: "x" },
+      { foo: "y", bar: "y" }
     ]);
   });
 
