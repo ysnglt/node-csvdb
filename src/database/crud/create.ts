@@ -14,7 +14,7 @@ const create = async (parser: ICSVEditor, data: Object[]) => {
 };
 
 // retrieves full CSV content to not erase it
-const readThenCreate = async (parser, data) => {
+const readThenCreate = async (parser: ICSVEditor, data: Object[]) => {
   const csvData = await read(parser);
   const fullData = csvData.concat(data);
 

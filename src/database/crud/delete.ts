@@ -1,6 +1,7 @@
 import read = require("./read");
 import createUtils = require("./create");
 import utils = require("../../utils");
+import { ICSVEditor } from "../../../bin/csv-factory/types";
 
 const deleteData = (array: Object[], predicate: Object) => {
   const deleted = [];
@@ -14,7 +15,7 @@ const deleteData = (array: Object[], predicate: Object) => {
   return { deleted, filtered };
 };
 
-const erase = async (parser, predicate) => {
+const erase = async (parser: ICSVEditor, predicate: Object) => {
   const csvData = await read(parser);
   const { deleted, filtered } = deleteData(csvData, predicate);
 

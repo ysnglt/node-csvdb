@@ -3,6 +3,7 @@ import util = require("util");
 
 import utils = require("../../utils");
 import create = require("./create");
+
 import { ICSVEditor, IReadEvents, IEditEvents } from "../../csv-factory/types";
 
 const editObject = (object, subset) => {
@@ -44,7 +45,11 @@ const update = async (
     }
   );
 
-const updateThenCreate = async (parser, predicate, updateValue) => {
+const updateThenCreate = async (
+  parser: ICSVEditor,
+  predicate: Object,
+  updateValue: Object
+) => {
   const { editedData, foundData } = await update(
     parser,
     predicate,
