@@ -1,29 +1,56 @@
 # csvdb : node.js flat file CSV database
 
-> Lightweight CRUD flat file database, using CSV as storage. Powered by async/await.
+> Lightweight CRUD flat file database, using CSV as storage. Powered by Typescript + async/await.
+> :zap: For node.js 7+
+
+Features :
+
+* complete CRUD API
+* json-like requests
+* model validation
+* Typescript typings
+
+## Usage
+
+```js
+> const db = await csvdb("users.csv", ["id","name","email"]);
+
+> await db.get({email: "johndoe@github.com"});
+[ {id: 1, name: "johndoe", mail: "john@github.com"} ]
+
+> await db.add({id: 2, name: "stevejobs", mail: "jobs@github.com"});
+```
+
+## Installation
+
+This project is made using Typescript. To generate the transpiled npm package, you need to run gulp :
+`> gulp`
+
+You can run the full test suite with mocha :
+`> npm i && npm run test`
 
 ## API Reference
 
 * [csvdb<T>](#module_csvdb)
-  * [.get([data])](#module_csvdb.get)
-  * [.edit(data)](#module_csvdb.edit)
-  * [.add(data)](#module_csvdb.add)
-  * [.delete(data)](#module_csvdb.delete)
+  * [.get](#module_csvdb.get)
+  * [.edit](#module_csvdb.edit)
+  * [.add](#module_csvdb.add)
+  * [.delete](#module_csvdb.delete)
 
 <a name="module_csvdb"></a>
 
-### csvdb(filename, model [, delimiter]) ⇒ <code>Promise <CsvDatabase<T>></code>
+### csvdb(filename, model [, delimiter]) ⇒ `Promise<CsvDatabase>`
 
-Returns a CRUD database given a CSV file and an object model.
+Returns a database, given a CSV file and its model.
 
-* uses `;` as default delimiter
-* creates file if it doesn't exist
+* `;` as default delimiter
+* file is created if it doesn't exist
 
-| Param                | Type                  | Description                             |
-| -------------------- | --------------------- | --------------------------------------- |
-| filename             | <code>string</code>   | the input value to convert to an array  |
-| model                | <code>string[]</code> | database model, as keys in string array |
-| [optional] delimiter | <code>string</code>   | custom CSV delimiter                    |
+| Param                | Type       | Description      |
+| -------------------- | ---------- | ---------------- |
+| filename             | `string`   | csv file         |
+| model                | `string[]` | database model   |
+| [optional] delimiter | `string`   | custom delimiter |
 
 **Example**
 
@@ -33,16 +60,16 @@ const db = await csvdb("users.csv", ["id","name","email"], ",");
 
 <a name="module_csvdb.get"></a>
 
-### db.get([predicate]) ⇒ <code>Promise<T[]></code>
+### db.get([predicate]) ⇒ `Promise<Object[]>`
 
-Returns database content. If given an object predicate, returns data that matches its key-values pairs.
+Returns database content. If given a predicate, returns data that matches its key-values pairs.
 
-* if nothing is found, returns an empty array
-* throws an error if predicate object does not match csv model
+* empty array if nothing found
+* throws an error if predicate does not match csv model
 
-| Param                | Type                    | Description                                                  |
-| -------------------- | ----------------------- | ------------------------------------------------------------ |
-| [optional] predicate | <code>Partial<T></code> | object or partial that matches model, to be searched against |
+| Param                | Type             | Description      |
+| -------------------- | ---------------- | ---------------- |
+| [optional] predicate | `Object.partial` | search predicate |
 
 **Example**
 
@@ -62,17 +89,16 @@ Returns database content. If given an object predicate, returns data that matche
 
 <a name="module_csvdb.edit"></a>
 
-### db.edit(predicate, data) ⇒ <code>Promise<Object[]></code>
+### db.edit(predicate, data) ⇒ `Promise<Object[]>`
 
-Edits data that matches a predicate.
+Edits data, given a search predicate object.
 
-* it will edit all occurences that match the given predicate
 * returns a list of edited occurences
 
-| Param     | Type                    | Description                                        |
-| --------- | ----------------------- | -------------------------------------------------- |
-| predicate | <code>Partial<T></code> | predicate to match data                            |
-| data      | <code>Partial<T></code> | data that will replace found occurences key/values |
+| Param     | Type             | Description                                        |
+| --------- | ---------------- | -------------------------------------------------- |
+| predicate | `Object.partial` | search predicate                                   |
+| data      | `Object.partial` | data that will replace found occurences key/values |
 
 **Example**
 
@@ -83,15 +109,15 @@ Edits data that matches a predicate.
 
 <a name="module_csvdb.add"></a>
 
-### db.add(data) ⇒ <code>Promise<Object[]></code>
+### db.add(data) ⇒ `Promise<Object[]>`
 
 Adds data to CSV.
 
 * returns created occurences
 
-| Param | Type             | Description                  |
-| ----- | ---------------- | ---------------------------- |
-| data  | <code>T[]</code> | array of objects to be added |
+| Param | Type       | Description      |
+| ----- | ---------- | ---------------- |
+| data  | `Object[]` | data to be added |
 
 **Example**
 
@@ -100,15 +126,15 @@ Adds data to CSV.
 [{id: 3, name: "stevejobs", mail: "jobs@github.com"}]
 ```
 
-### db.delete(predicate) ⇒ <code>Promise<Object[]></code>
+### db.delete(predicate) ⇒ `Promise<Object[]>`
 
 Deletes all data that matches the given predicate.
 
 * returns deleted occurences
 
-| Param     | Type                    | Description      |
-| --------- | ----------------------- | ---------------- |
-| predicate | <code>Partial<T></code> | predicate object |
+| Param     | Type             | Description      |
+| --------- | ---------------- | ---------------- |
+| predicate | `Object.partial` | search predicare |
 
 **Example**
 
