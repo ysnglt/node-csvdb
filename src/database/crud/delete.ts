@@ -1,7 +1,8 @@
 import read = require("./read");
 import createUtils = require("./create");
 import utils = require("../../utils");
-import { ICSVEditor } from "../../../bin/csv-factory/types";
+
+import { ICSVEditor } from "../../csv-factory/types";
 
 const deleteData = (array: Object[], predicate: Object) => {
   const deleted = [];
