@@ -13,9 +13,9 @@ Features :
 ## Usage
 
 ```js
-> const db = await csvdb("users.csv", ["id","name","email"]);
+> const db = await csvdb("users.csv", ["id","name","mail"]);
 
-> await db.get({email: "johndoe@github.com"});
+> await db.get({mail: "johndoe@github.com"});
 [ {id: 1, name: "johndoe", mail: "john@github.com"} ]
 
 > await db.add([{id: 2, name: "stevejobs", mail: "jobs@github.com"}]);
@@ -55,7 +55,7 @@ Returns a database, given a CSV file and its model.
 **Example**
 
 ```js
-const db = await csvdb("users.csv", ["id","name","email"], ",");
+const db = await csvdb("users.csv", ["id","name","mail"], ",");
 ```
 
 <a name="module_csvdb.get"></a>
@@ -103,7 +103,7 @@ Edits data, given a search predicate object.
 **Example**
 
 ```js
-> await db.edit({name: "johndoe"}, {email: "john@gitlab.com"});
+> await db.edit({name: "johndoe"}, {mail: "john@gitlab.com"});
 [{1, "johndoe", "john@gitlab.com"}]
 ```
 
