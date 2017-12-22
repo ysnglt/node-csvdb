@@ -18,7 +18,7 @@ Features :
 > await db.get({email: "johndoe@github.com"});
 [ {id: 1, name: "johndoe", mail: "john@github.com"} ]
 
-> await db.add({id: 2, name: "stevejobs", mail: "jobs@github.com"});
+> await db.add([{id: 2, name: "stevejobs", mail: "jobs@github.com"}]);
 ```
 
 ## Installation
