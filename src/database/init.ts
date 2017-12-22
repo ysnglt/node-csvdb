@@ -22,10 +22,29 @@ const createFileIfNotExist = async (
   }
 };
 
+const hasSameModel = (obj: Object, model: string[]) => {
+  const objKeys = Object.keys(obj);
+
+  for (const key of model) {
+    if (!objKeys.includes(key)) return false;
+  }
+
+  // if length is different, arrays are not equal
+  return objKeys.length === model.length;
+};
+
 const validate = async (parser: ICSVEditor, model: string[]) => {
+  let validated = false;
+  // stop at first line once model has been validated
+  const checkModel = data => {
+    if (!validated && !hasSameModel(data, model))
+      throw new Error("csv model doesn't correspond");
+    validated = true;
+  };
+
   return new Promise((resolve, reject) => {
     const events: IReadEvents = {
-      onData: data => {}, // do nothing to fire event
+      onData: checkModel,
       onError: err => reject(new Error("error reading CSV : " + err)),
       onEnd: resolve
     };
@@ -34,9 +53,14 @@ const validate = async (parser: ICSVEditor, model: string[]) => {
   });
 };
 
-const initDb = async (filename: string, model: string[], delimiter, parser) => {
+const initDb = async (
+  filename: string,
+  model: string[],
+  delimiter: string,
+  parser: ICSVEditor
+) => {
   await createFileIfNotExist(filename, model, delimiter);
-  await validate(parser, delimiter);
+  await validate(parser, model);
 };
 
 export = initDb;

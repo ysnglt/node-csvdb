@@ -47,6 +47,33 @@ describe("database init", () => {
     }
     throw new Error("file is invalid but has been validated");
   });
+
+  it("should check CSV model - different keys", async () => {
+    try {
+      await csvdb(EXISTINGFILE, ["not", "csv", "keys"]);
+    } catch (err) {
+      return;
+    }
+    throw new Error("file has wrong model but has been validated");
+  });
+
+  it("should check CSV model - extra key", async () => {
+    try {
+      await csvdb(EXISTINGFILE, MODEL.concat("plusonekey"));
+    } catch (err) {
+      return;
+    }
+    throw new Error("file has wrong model but has been validated");
+  });
+
+  it("should check CSV model - model subset", async () => {
+    try {
+      await csvdb(EXISTINGFILE, MODEL.slice(0, 1));
+    } catch (err) {
+      return;
+    }
+    throw new Error("file has wrong model but has been validated");
+  });
 });
 
 describe("database behavior - read", () => {
