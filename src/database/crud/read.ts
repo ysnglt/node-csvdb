@@ -17,15 +17,12 @@ const get = async (parser: ICSVEditor, predicate?: Object) => {
     ? data => addFilteredData(foundData, predicate, data)
     : data => addData(foundData, data);
 
-  return new Promise<Object[]>((resolve, reject) => {
-    const events: IReadEvents = {
-      onData: filterData,
-      onError: err => reject(new Error("error reading CSV : " + err)),
-      onEnd: () => resolve(foundData)
-    };
+  const events: IReadEvents = {
+    onData: filterData
+  };
 
-    parser.read(events);
-  });
+  await parser.read(events);
+  return foundData;
 };
 
 export = get;

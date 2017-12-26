@@ -18,27 +18,25 @@ const update = async (
   parser: ICSVEditor,
   predicate: Object,
   updateValue: Object
-) =>
-  new Promise<Object[]>((resolve, reject) => {
-    const editedData = [];
+) => {
+  const editedData = [];
 
-    const editData = data => {
-      if (utils.isSubsetOf(predicate, data)) {
-        const updated = editObject(data, updateValue);
+  const editData = data => {
+    if (utils.isSubsetOf(predicate, data)) {
+      const updated = editObject(data, updateValue);
 
-        editedData.push(updated);
-        return updated;
-      }
-      return data;
-    };
+      editedData.push(updated);
+      return updated;
+    }
+    return data;
+  };
 
-    const events: IEditEvents = {
-      onEdit: editData,
-      onError: err => reject(new Error("error editing CSV : " + err)),
-      onEnd: () => resolve(editedData)
-    };
+  const events: IEditEvents = {
+    onEdit: editData
+  };
 
-    parser.edit(events);
-  });
+  await parser.edit(events);
+  return editedData;
+};
 
 export = update;

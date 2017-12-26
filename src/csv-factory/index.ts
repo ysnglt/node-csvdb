@@ -2,7 +2,7 @@ import fastcsv = require("fast-csv");
 import tempy = require("tempy");
 import fs = require("fs");
 
-import { ICSVEditor, IEvents, IEditEvents, IReadEvents } from "./types";
+import { ICSVEditor, IEditEvents, IReadEvents } from "./types";
 
 /** file i/o helpers */
 const getCsvStream = (file: string, delimiter: string) => {
@@ -29,70 +29,68 @@ const copyCsv = (from: string, to: string) =>
   });
 /**  */
 
-const read = (filename: string, delimiter: string, events: IReadEvents) => {
-  fastcsv
-    .fromPath(filename, { delimiter: delimiter, headers: true })
-    .on("data", events.onData)
-    .on("error", events.onError)
-    .on("end", events.onEnd);
-};
+const read = async (filename: string, delimiter: string, events: IReadEvents) =>
+  new Promise((resolve, reject) => {
+    fastcsv
+      .fromPath(filename, { delimiter: delimiter, headers: true })
+      .on("data", events.onData)
+      .on("error", reject)
+      .on("end", resolve);
+  });
 
-const edit = (filename: string, delimiter: string, events: IEditEvents) => {
-  const copy = tempy.file();
-  const tempStream = getCsvStream(copy, delimiter);
+const edit = (filename: string, delimiter: string, events: IEditEvents) =>
+  new Promise((resolve, reject) => {
+    const copy = tempy.file();
+    const tempStream = getCsvStream(copy, delimiter);
 
-  fastcsv
-    .fromPath(filename, { delimiter: delimiter, headers: true })
-    .on("data", data => {
-      const newData = events.onEdit(data);
-      // handling deletion case when editing returns nothing
-      if (newData) tempStream.write(newData);
-    })
-    .on("error", events.onError)
-    .on("end", () => {
-      tempStream.end();
+    fastcsv
+      .fromPath(filename, { delimiter: delimiter, headers: true })
+      .on("data", data => {
+        const newData = events.onEdit(data);
+        // handling deletion case when editing returns nothing
+        if (newData) tempStream.write(newData);
+      })
+      .on("error", reject)
+      .on("end", () => {
+        tempStream.end();
+      });
+
+    tempStream.on("end", () => {
+      // copy data from tempfile to original file
+      copyCsv(copy, filename)
+        .then(resolve)
+        .catch(reject);
     });
-
-  tempStream.on("end", () => {
-    // copy data from tempfile to original file
-    copyCsv(copy, filename)
-      .then(events.onEnd)
-      .catch(events.onError);
   });
-};
 
-const add = (
-  filename: string,
-  delimiter: string,
-  data: Object[],
-  events: IEvents
-) => {
-  const copy = tempy.file();
-  const tempStream = getCsvStream(copy, delimiter);
+const add = (filename: string, delimiter: string, data: Object[]) =>
+  new Promise((resolve, reject) => {
+    const copy = tempy.file();
+    const tempStream = getCsvStream(copy, delimiter);
 
-  fastcsv
-    .fromPath(filename, { delimiter: delimiter, headers: true })
-    .on("error", events.onError)
-    .on("end", () => {
-      // writing added data at end of file
-      for (const row of data) {
-        tempStream.write(row);
-      }
-      tempStream.end();
-    })
-    .pipe(tempStream);
+    fastcsv
+      .fromPath(filename, { delimiter: delimiter, headers: true })
+      .on("error", reject)
+      .on("end", () => {
+        // appending data at end of file
+        for (const row of data) {
+          tempStream.write(row);
+        }
+        tempStream.end();
+      })
+      .pipe(tempStream);
 
-  tempStream.on("end", () => {
-    // copy data from tempfile to original file
-    copyCsv(copy, filename)
-      .then(events.onEnd)
-      .catch(events.onError);
+    tempStream.on("end", () => {
+      // copy data from tempfile to original file
+      copyCsv(copy, filename)
+        .then(resolve)
+        .catch(reject);
+    });
   });
-};
 
 const csvEditor = (filename, delimiter): ICSVEditor => ({
   read: events => read(filename, delimiter, events),
-  add: (data, events) => add(filename, delimiter, data, events),
+  add: data => add(filename, delimiter, data),
   edit: events => edit(filename, delimiter, events)
 });
 

@@ -42,15 +42,11 @@ const validate = async (parser: ICSVEditor, model: string[]) => {
     validated = true;
   };
 
-  return new Promise((resolve, reject) => {
-    const events: IReadEvents = {
-      onData: checkModel,
-      onError: err => reject(new Error("error reading CSV : " + err)),
-      onEnd: resolve
-    };
+  const events: IReadEvents = {
+    onData: checkModel
+  };
 
-    parser.read(events);
-  });
+  return parser.read(events);
 };
 
 const initDb = async (
