@@ -1,8 +1,25 @@
 import fastcsv = require("fast-csv");
 import tempy = require("tempy");
+import lockfile = require("proper-lockfile");
 import fs = require("fs");
 
 import { ICSVEditor, IEditEvents, IReadEvents } from "./types";
+
+// lock middleware to ensure async/thread safety
+const lock = async (file: string, next) =>
+  new Promise((resolve, reject) => {
+    lockfile.lock(file, async (err, release) => {
+      if (err) reject(err);
+
+      try {
+        await next();
+      } catch (err) {
+        reject(err);
+      }
+      release();
+      resolve();
+    });
+  });
 
 /** file i/o helpers */
 const getCsvStream = (file: string, delimiter: string) => {
@@ -88,10 +105,30 @@ const add = (filename: string, delimiter: string, data: Object[]) =>
     });
   });
 
+const lockedEdit = async (
+  filename: string,
+  delimiter: string,
+  events: IEditEvents
+) => {
+  const func = async () => edit(filename, delimiter, events);
+
+  return lock(filename, func);
+};
+
+const lockedAdd = async (
+  filename: string,
+  delimiter: string,
+  data: Object[]
+) => {
+  const func = async () => add(filename, delimiter, data);
+
+  return lock(filename, func);
+};
+
 const csvEditor = (filename, delimiter): ICSVEditor => ({
   read: events => read(filename, delimiter, events),
-  add: data => add(filename, delimiter, data),
-  edit: events => edit(filename, delimiter, events)
+  add: data => lockedAdd(filename, delimiter, data),
+  edit: events => lockedEdit(filename, delimiter, events)
 });
 
 export = csvEditor;

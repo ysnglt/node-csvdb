@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "dependencies": {
     "fast-csv": "^2.4.1",
+    "proper-lockfile": "^2.0.1",
     "tempy": "^0.2.1"
   },
   "devDependencies": {
