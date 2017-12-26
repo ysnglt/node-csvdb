@@ -19,46 +19,26 @@ const update = async (
   predicate: Object,
   updateValue: Object
 ) =>
-  new Promise<{ editedData: Object[]; foundData: Object[] }>(
-    (resolve, reject) => {
-      const editedData = [];
-      const foundData = [];
+  new Promise<Object[]>((resolve, reject) => {
+    const editedData = [];
 
-      const editData = data => {
-        if (utils.isSubsetOf(predicate, data)) {
-          const updated = editObject(data, updateValue);
+    const editData = data => {
+      if (utils.isSubsetOf(predicate, data)) {
+        const updated = editObject(data, updateValue);
 
-          editedData.push(updated);
-          return updated;
-        }
-        return data;
-      };
+        editedData.push(updated);
+        return updated;
+      }
+      return data;
+    };
 
-      const events: IEditEvents = {
-        onEdit: editData,
-        onData: data => foundData.push(data),
-        onError: err => reject(new Error("error editing CSV : " + err)),
-        onEnd: () => resolve({ editedData, foundData })
-      };
+    const events: IEditEvents = {
+      onEdit: editData,
+      onError: err => reject(new Error("error editing CSV : " + err)),
+      onEnd: () => resolve(editedData)
+    };
 
-      parser.edit(events);
-    }
-  );
+    parser.edit(events);
+  });
 
-const updateThenCreate = async (
-  parser: ICSVEditor,
-  predicate: Object,
-  updateValue: Object
-) => {
-  const { editedData, foundData } = await update(
-    parser,
-    predicate,
-    updateValue
-  );
-  if (editedData.length === 0) return [];
-
-  await create.create(parser, foundData);
-  return editedData;
-};
-
-export = updateThenCreate;
+export = update;

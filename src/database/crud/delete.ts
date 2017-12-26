@@ -1,28 +1,26 @@
 import read = require("./read");
-import createUtils = require("./create");
 import utils = require("../../utils");
 
-import { ICSVEditor } from "../../csv-factory/types";
+import { ICSVEditor, IEditEvents } from "../../csv-factory/types";
 
-const deleteData = (array: Object[], predicate: Object) => {
-  const deleted = [];
-  const filtered = array.filter(data => {
-    if (!utils.isSubsetOf(predicate, data)) return true;
+const erase = async (parser: ICSVEditor, predicate: Object) =>
+  new Promise<Object[]>((resolve, reject) => {
+    const deletedData = [];
 
-    deleted.push(data);
-    return false;
+    const deleteData = data => {
+      if (utils.isSubsetOf(predicate, data)) {
+        deletedData.push(data);
+      } else return data;
+    };
+
+    const events: IEditEvents = {
+      onEdit: deleteData,
+      onError: err =>
+        reject(new Error("error deleting data from CSV : " + err)),
+      onEnd: () => resolve(deletedData)
+    };
+
+    parser.edit(events);
   });
-
-  return { deleted, filtered };
-};
-
-const erase = async (parser: ICSVEditor, predicate: Object) => {
-  const csvData = await read(parser);
-  const { deleted, filtered } = deleteData(csvData, predicate);
-
-  // recreating csv without deleted data
-  await createUtils.create(parser, filtered);
-  return deleted;
-};
 
 export = erase;

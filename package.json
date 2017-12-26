@@ -4,12 +4,14 @@
   "description": "lightweight flat file CSV database",
   "main": "src/index.ts",
   "dependencies": {
-    "fast-csv": "^2.4.1"
+    "fast-csv": "^2.4.1",
+    "tempy": "^0.2.1"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.44",
     "@types/mock-fs": "^3.6.30",
     "@types/node": "^8.0.53",
+    "@types/tempy": "^0.1.0",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-json-editor": "^2.2.1",

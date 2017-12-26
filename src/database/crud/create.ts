@@ -9,19 +9,8 @@ const create = async (parser: ICSVEditor, data: Object[]) => {
       onEnd: () => resolve(data)
     };
 
-    parser.write(data, events);
+    parser.add(data, events);
   });
 };
 
-// retrieves full CSV content to not erase it
-const readThenCreate = async (parser: ICSVEditor, data: Object[]) => {
-  const csvData = await read(parser);
-  const fullData = csvData.concat(data);
-
-  return await create(parser, fullData);
-};
-
-export = {
-  readThenCreate: readThenCreate,
-  create: create
-};
+export = create;

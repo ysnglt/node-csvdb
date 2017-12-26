@@ -10,12 +10,12 @@ export interface IReadEvents extends IEvents {
   onData: (data: Object) => Object | void;
 }
 
-export interface IEditEvents extends IReadEvents {
+export interface IEditEvents extends IEvents {
   onEdit: (data: Object) => Object | void;
 }
 
 export interface ICSVEditor {
   read: (e: IReadEvents) => any;
-  write: (data, e: IEvents) => any;
+  add: (data, e: IEvents) => any;
   edit: (e: IEditEvents) => any;
 }

@@ -2,8 +2,7 @@ import csv = require("../csv-factory");
 import init = require("./init");
 import get = require("./crud/read");
 import erase = require("./crud/delete");
-import createPackage = require("./crud/create");
-const create = createPackage.readThenCreate;
+import create = require("./crud/create");
 import update = require("./crud/update");
 import { ICSVEditor } from "../csv-factory/types";
 
