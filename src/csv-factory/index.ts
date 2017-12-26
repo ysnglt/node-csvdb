@@ -5,20 +5,38 @@ import fs = require("fs");
 
 import { ICSVEditor, IEditEvents, IReadEvents } from "./types";
 
+// Map SIGINT & SIGTERM to process exit
+// so that lockfile removes the lockfile automatically
+process
+  .once("SIGINT", () => process.exit(1))
+  .once("SIGTERM", () => process.exit(1));
+
 // lock middleware to ensure async/thread safety
 const lock = async (file: string, next) =>
   new Promise((resolve, reject) => {
-    lockfile.lock(file, async (err, release) => {
-      if (err) reject(err);
+    lockfile.lock(
+      file,
+      {
+        retries: {
+          retries: 500,
+          factor: 3,
+          minTimeout: 1 * 10,
+          maxTimeout: 60 * 1000,
+          randomize: true
+        }
+      },
+      async (err, release) => {
+        if (err) reject(err);
 
-      try {
-        await next();
-      } catch (err) {
-        reject(err);
+        try {
+          await next();
+        } catch (err) {
+          reject(err);
+        }
+        release();
+        resolve();
       }
-      release();
-      resolve();
-    });
+    );
   });
 
 /** file i/o helpers */

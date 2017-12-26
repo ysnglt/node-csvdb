@@ -164,3 +164,35 @@ describe("database behavior - create | update | delete", () => {
     assert.deepEqual(deletedValue, []);
   });
 });
+
+describe("database behavior - concurrency", () => {
+  beforeEach(() => {
+    mockfs({ fixtures: { "db.csv": EXISTINGFILECONTENT } });
+  });
+
+  it("should edit data concurrently", async () => {
+    const db = await csvdb(EXISTINGFILE, MODEL);
+    const firstEdit = db.edit({ foo: "a" }, { foo: "x", bar: "y" });
+    const lastEdit = db.edit({ foo: "c" }, { foo: "i", bar: "j" });
+    await Promise.all([firstEdit, lastEdit]);
+
+    const values = await db.get();
+
+    assert.deepEqual(values, [{ foo: "x", bar: "y" }, { foo: "i", bar: "j" }]);
+  });
+
+  it("should add data concurrently", async () => {
+    const db = await csvdb(EXISTINGFILE, MODEL);
+    const firstEdit = db.add([{ foo: "x", bar: "x" }]);
+    const lastEdit = db.add([{ foo: "y", bar: "y" }]);
+    await Promise.all([firstEdit, lastEdit]);
+    const values = await db.get();
+
+    assert.deepEqual(values, [
+      { foo: "a", bar: "b" },
+      { foo: "c", bar: "d" },
+      { foo: "x", bar: "x" },
+      { foo: "y", bar: "y" }
+    ]);
+  });
+});
