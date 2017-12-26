@@ -1,14 +1,15 @@
 # csvdb : node.js flat file CSV database
 
 > Lightweight CRUD flat file database, using CSV as storage. Powered by Typescript + async/await.
+
 > :zap: For node.js 7+
 
 Features :
 
-* complete CRUD API
+* complete CRUD API with model validation
 * json-like requests
-* model validation
 * Typescript typings
+* concurrency-ready
 
 ## Usage
 
@@ -125,6 +126,8 @@ Adds data to CSV.
 > await db.add({id: 3, name: "stevejobs", mail: "jobs@github.com"});
 [{id: 3, name: "stevejobs", mail: "jobs@github.com"}]
 ```
+
+<a name="module_csvdb.add"></a>
 
 ### db.delete(predicate) ⇒ `Promise<Object[]>`
 
