@@ -4,8 +4,17 @@ import util = require("util");
 
 import { ICSVEditor, IReadEvents } from "../csv-factory/types";
 
-const doesFileExist = util.promisify(fs.exists);
-const createFile = util.promisify(fs.writeFile);
+const doesFileExist = (filename: string) =>
+  new Promise<boolean>((resolve, reject) => {
+    fs.exists(filename, resolve);
+  });
+
+const createFile = (filename: string, data: any) =>
+  new Promise<void>((resolve, reject) => {
+    fs.writeFile(filename, data, err => {
+      err ? reject(err) : resolve();
+    });
+  });
 
 const createFileIfNotExist = async (
   filename: string,
@@ -24,9 +33,10 @@ const createFileIfNotExist = async (
 
 const hasSameModel = (obj: Object, model: string[]) => {
   const objKeys = Object.keys(obj);
+  const objHasKey = key => objKeys.find(k => k === key);
 
   for (const key of model) {
-    if (!objKeys.includes(key)) return false;
+    if (!objHasKey(key)) return false;
   }
 
   // if length is different, arrays are not equal
