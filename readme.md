@@ -1,8 +1,8 @@
-# csvdb : node.js flat file CSV database
+# csv-database : node.js CSV database
 
-> Lightweight CRUD flat file database, using CSV as storage. Powered by Typescript + async/await.
+> Lightweight CRUD database, using CSV as storage. Powered by Typescript + async/await.
 
-> :zap: For node.js 7+
+> :zap: For node.js 7.6+
 
 Features :
 
@@ -24,11 +24,7 @@ Features :
 
 ## Installation
 
-This project is made using Typescript. To generate the transpiled npm package, you need to run gulp :
-`> gulp`
-
-You can run the full test suite with mocha :
-`> npm i && npm run test`
+`$ npm install csv-database`
 
 ## API Reference
 
@@ -145,3 +141,17 @@ Deletes all data that matches the given predicate.
 > await db.delete({id: 1});
 [ {id: 1, name: "johndoe", mail: "john@github.com"} ]
 ```
+
+## Local installation
+
+Clone the project :
+
+`$ git clone https://github.com/ysnglt/node-csvdb`
+
+This project is made using Typescript. To generate the transpiled npm package, you need to run gulp :
+
+`$ gulp`
+
+You can run the full test suite with mocha :
+
+`$ npm i && npm run test`
