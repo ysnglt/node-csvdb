@@ -9,7 +9,10 @@ const addFilteredData = (array: Object[], subset: Object, data: Object) =>
 
 const addData = (array: Object[], data: Object) => array.push(data);
 
-const get = async (parser: ICSVEditor, predicate?: Object) => {
+const get = async (
+  parser: ICSVEditor,
+  predicate?: Object
+): Promise<Object[]> => {
   const foundData = [];
 
   // changes behavior if a predicate is given

@@ -18,7 +18,7 @@ const update = async (
   parser: ICSVEditor,
   predicate: Object,
   updateValue: Object
-) => {
+): Promise<Object[]> => {
   const editedData = [];
 
   const editData = data => {

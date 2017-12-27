@@ -3,7 +3,10 @@ import utils = require("../../utils");
 
 import { ICSVEditor, IEditEvents } from "../../csv-factory/types";
 
-const erase = async (parser: ICSVEditor, predicate: Object) => {
+const erase = async (
+  parser: ICSVEditor,
+  predicate: Object
+): Promise<Object[]> => {
   const deletedData = [];
 
   const deleteData = data => {
