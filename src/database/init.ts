@@ -1,8 +1,8 @@
-import csv = require("../csv-factory");
+import csv = require("../csv-editor");
 import fs = require("fs");
 import util = require("util");
 
-import { ICSVEditor, IReadEvents } from "../csv-factory/types";
+import { ICSVEditor, IReadEvents } from "../csv-editor/types";
 
 const doesFileExist = (filename: string) =>
   new Promise<boolean>((resolve, reject) => {

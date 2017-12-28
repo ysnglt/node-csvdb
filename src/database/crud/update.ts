@@ -4,7 +4,7 @@ import util = require("util");
 import utils = require("../../utils");
 import create = require("./create");
 
-import { ICSVEditor, IReadEvents, IEditEvents } from "../../csv-factory/types";
+import { ICSVEditor, IReadEvents, IEditEvents } from "../../csv-editor/types";
 
 const editObject = (object, subset) => {
   let editedObject = { ...object };

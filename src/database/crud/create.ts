@@ -1,6 +1,6 @@
 import read = require("./read");
 
-import { ICSVEditor, IReadEvents } from "../../csv-factory/types";
+import { ICSVEditor, IReadEvents } from "../../csv-editor/types";
 
 const create = async (
   parser: ICSVEditor,

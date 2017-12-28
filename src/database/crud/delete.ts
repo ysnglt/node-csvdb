@@ -1,7 +1,7 @@
 import read = require("./read");
 import utils = require("../../utils");
 
-import { ICSVEditor, IEditEvents } from "../../csv-factory/types";
+import { ICSVEditor, IEditEvents } from "../../csv-editor/types";
 
 const erase = async (
   parser: ICSVEditor,

@@ -1,10 +1,10 @@
-import csv = require("../csv-factory");
+import csv = require("../csv-editor");
 import init = require("./init");
 import get = require("./crud/read");
 import erase = require("./crud/delete");
 import create = require("./crud/create");
 import update = require("./crud/update");
-import { ICSVEditor } from "../csv-factory/types";
+import { ICSVEditor } from "../csv-editor/types";
 
 const DEFAULT_DELIM = ";";
 
