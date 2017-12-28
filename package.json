@@ -1,9 +1,9 @@
 {
   "name": "csv-database",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "lightweight CSV database",
   "main": "src/index.ts",
-  "keywords": ["csv", "database", "db", "crud"],
+  "keywords": ["csv", "database", "db", "crud", "storage", "flat file", "file"],
   "repository": {
     "url": "https://github.com/ysnglt/node-csvdb"
   },
