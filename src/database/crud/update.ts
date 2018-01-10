@@ -4,10 +4,10 @@ import util = require("util");
 import utils = require("../../utils");
 import create = require("./create");
 
-import { ICSVEditor, IReadEvents, IEditEvents } from "../../csv-editor/types";
+import { ICSVEditor, IEditEvents, IReadEvents } from "../../csv-editor/types";
 
 const editObject = (object, subset) => {
-  let editedObject = { ...object };
+  const editedObject = { ...object };
   Object.keys(subset).forEach(key => {
     editedObject[key] = subset[key];
   });

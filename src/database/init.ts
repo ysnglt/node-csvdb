@@ -1,6 +1,6 @@
-import csv = require("../csv-editor");
 import fs = require("fs");
 import util = require("util");
+import csv = require("../csv-editor");
 
 import { ICSVEditor, IReadEvents } from "../csv-editor/types";
 

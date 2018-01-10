@@ -2,6 +2,7 @@ import fs = require("fs");
 import util = require("util");
 
 import utils = require("../../utils");
+
 import { ICSVEditor, IReadEvents } from "../../csv-editor/types";
 
 const addFilteredData = (array: Object[], subset: Object, data: Object) =>

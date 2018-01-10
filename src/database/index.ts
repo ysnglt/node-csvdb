@@ -1,9 +1,10 @@
 import csv = require("../csv-editor");
-import init = require("./init");
-import get = require("./crud/read");
-import erase = require("./crud/delete");
 import create = require("./crud/create");
+import erase = require("./crud/delete");
+import get = require("./crud/read");
 import update = require("./crud/update");
+import init = require("./init");
+
 import { ICSVEditor } from "../csv-editor/types";
 
 const DEFAULT_DELIM = ";";
@@ -18,7 +19,7 @@ const database = (editor: ICSVEditor, delimiter?: string) => {
 };
 
 const csvdb = async (filename: string, model: string[], delim?: string) => {
-  let delimiter = delim ? delim : DEFAULT_DELIM;
+  const delimiter = delim ? delim : DEFAULT_DELIM;
   const editor = csv(filename, delimiter);
 
   await init(filename, model, delimiter, editor);

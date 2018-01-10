@@ -1,6 +1,6 @@
 import assert = require("assert");
-import mockfs = require("mock-fs");
 import fs = require("fs");
+import mockfs = require("mock-fs");
 
 import csvdb = require("../src");
 

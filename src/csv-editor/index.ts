@@ -1,7 +1,7 @@
 import fastcsv = require("fast-csv");
-import tempy = require("tempy");
-import lockfile = require("proper-lockfile");
 import fs = require("fs");
+import lockfile = require("proper-lockfile");
+import tempy = require("tempy");
 
 import { ICSVEditor, IEditEvents, IReadEvents } from "./types";
 
@@ -26,7 +26,9 @@ const lock = async (file: string, next) =>
         }
       },
       async (err, release) => {
-        if (err) reject(err);
+        if (err) {
+          reject(err);
+        }
 
         try {
           await next();
@@ -45,7 +47,7 @@ const getCsvStream = (file: string, delimiter: string) => {
   const fileStream = fs.createWriteStream(file, { flags: "a" });
   const csvStream = fastcsv.createWriteStream({
     headers: true,
-    delimiter: delimiter
+    delimiter
   });
 
   csvStream.pipe(fileStream);
@@ -67,7 +69,7 @@ const copyCsv = (from: string, to: string) =>
 const read = async (filename: string, delimiter: string, events: IReadEvents) =>
   new Promise((resolve, reject) => {
     fastcsv
-      .fromPath(filename, { delimiter: delimiter, headers: true })
+      .fromPath(filename, { delimiter, headers: true })
       .on("data", events.onData)
       .on("error", reject)
       .on("end", resolve);
@@ -79,11 +81,13 @@ const edit = (filename: string, delimiter: string, events: IEditEvents) =>
     const tempStream = getCsvStream(copy, delimiter);
 
     fastcsv
-      .fromPath(filename, { delimiter: delimiter, headers: true })
+      .fromPath(filename, { delimiter, headers: true })
       .on("data", data => {
         const newData = events.onEdit(data);
         // handling deletion case when editing returns nothing
-        if (newData) tempStream.write(newData);
+        if (newData) {
+          tempStream.write(newData);
+        }
       })
       .on("error", reject)
       .on("end", () => {
@@ -104,7 +108,7 @@ const add = (filename: string, delimiter: string, data: Object[]) =>
     const tempStream = getCsvStream(copy, delimiter);
 
     fastcsv
-      .fromPath(filename, { delimiter: delimiter, headers: true })
+      .fromPath(filename, { delimiter, headers: true })
       .on("error", reject)
       .on("end", () => {
         // appending data at end of file
