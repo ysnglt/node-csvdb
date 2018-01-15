@@ -6,6 +6,10 @@ const create = async (
   parser: ICSVEditor,
   data: Object[]
 ): Promise<Object[]> => {
+  if (data.length < 1) {
+    return data;
+  }
+
   await parser.add(data);
   return data;
 };
