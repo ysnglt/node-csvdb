@@ -5,7 +5,7 @@ Lightweight CRUD database, using CSV as storage. Powered by Typescript + async/a
 Features :
 
 * complete CRUD API with model validation
-* object requests
+* native JS object requests
 * Typescript typings
 * concurrency-ready
 
@@ -106,13 +106,13 @@ Edits data, given a search predicate object.
 
 ### db.add(data) ⇒ `Promise<Object[]>`
 
-Adds data to CSV.
+Adds data (single object or array) to CSV.
 
 * returns created occurences
 
-| Param | Type                | Description      |
-| ----- | ------------------- | ---------------- |
-| data  | `Object | Object[]` | data to be added |
+| Param | Type               | Description      |
+| ----- | ------------------ | ---------------- |
+| data  | `Object, Object[]` | data to be added |
 
 **Example**
 
