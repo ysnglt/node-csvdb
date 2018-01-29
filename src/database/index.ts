@@ -12,7 +12,7 @@ const DEFAULT_DELIM = ";";
 const database = (editor: ICSVEditor, delimiter?: string) => {
   return {
     get: (filter?: Object) => get(editor, filter),
-    add: (data: Object[]) => create(editor, data),
+    add: (data: Object[] | Object) => create(editor, data),
     edit: (filter: Object, data: Object) => update(editor, filter, data),
     delete: (predicate: Object) => erase(editor, predicate)
   };

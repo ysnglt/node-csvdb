@@ -4,14 +4,13 @@ import { ICSVEditor, IReadEvents } from "../../csv-editor/types";
 
 const create = async (
   parser: ICSVEditor,
-  data: Object[]
+  data: Object[] | Object
 ): Promise<Object[]> => {
-  if (data.length < 1) {
-    return data;
-  }
+  const arrayData = data instanceof Array ? data : [data];
+  if (arrayData.length < 1) return arrayData;
 
-  await parser.add(data);
-  return data;
+  await parser.add(arrayData);
+  return arrayData;
 };
 
 export = create;

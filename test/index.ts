@@ -111,28 +111,6 @@ describe("database behavior - create | update | delete", () => {
     mockfs({ fixtures: { "db.csv": EXISTINGFILECONTENT } });
   });
 
-  it("should edit filtered data", async () => {
-    const db = await csvdb(EXISTINGFILE, MODEL);
-    const editedValues = await db.edit({ foo: "a" }, { foo: "x", bar: "y" });
-    const newValue = await db.get({ foo: "x" });
-    const oldValue = await db.get({ foo: "a" });
-
-    assert.deepEqual(editedValues, [{ foo: "x", bar: "y" }]);
-    assert.deepEqual(oldValue, []);
-    assert.deepEqual(newValue, [{ foo: "x", bar: "y" }]);
-  });
-
-  it("should return nothing when editing non existent data", async () => {
-    const db = await csvdb(EXISTINGFILE, MODEL);
-    const editedValue = await db.edit({ foo: "x" }, { foo: "x" });
-    const newValue = await db.get({ foo: "x" });
-    const oldValue = await db.get({ foo: "a" });
-
-    assert.deepEqual(editedValue, []);
-    assert.deepEqual(oldValue, [{ foo: "a", bar: "b" }]);
-    assert.deepEqual(newValue, []);
-  });
-
   it("should add data", async () => {
     const db = await csvdb(EXISTINGFILE, MODEL);
     await db.add([{ foo: "x", bar: "x" }, { foo: "y", bar: "y" }]);
@@ -144,6 +122,42 @@ describe("database behavior - create | update | delete", () => {
       { foo: "x", bar: "x" },
       { foo: "y", bar: "y" }
     ]);
+  });
+
+  it("should add a single occurence", async () => {
+    const db = await csvdb(EXISTINGFILE, MODEL);
+    await db.add({ foo: "x", bar: "x" });
+    const values = await db.get();
+
+    assert.deepEqual(values, [
+      { foo: "a", bar: "b" },
+      { foo: "c", bar: "d" },
+      { foo: "x", bar: "x" }
+    ]);
+  });
+
+  it("should edit filtered data", async () => {
+    const db = await csvdb(EXISTINGFILE, MODEL);
+    db.edit({}, {});
+    const editedValues = await db.edit({ foo: "a" }, { foo: "x", bar: "y" });
+    const newValue = await db.get({ foo: "x" });
+    const oldValue = await db.get({ foo: "a" });
+
+    assert.deepEqual(editedValues, [{ foo: "x", bar: "y" }]);
+    assert.deepEqual(oldValue, []);
+    assert.deepEqual(newValue, [{ foo: "x", bar: "y" }]);
+  });
+
+  it("should return nothing when editing non existent data", async () => {
+    const db = await csvdb(EXISTINGFILE, MODEL);
+    db.add([]);
+    const editedValue = await db.edit({ foo: "x" }, { foo: "x" });
+    const newValue = await db.get({ foo: "x" });
+    const oldValue = await db.get({ foo: "a" });
+
+    assert.deepEqual(editedValue, []);
+    assert.deepEqual(oldValue, [{ foo: "a", bar: "b" }]);
+    assert.deepEqual(newValue, []);
   });
 
   it("should delete filtered data", async () => {

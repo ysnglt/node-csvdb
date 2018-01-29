@@ -1,13 +1,11 @@
 # csv-database : node.js CSV database
 
-> Lightweight CRUD database, using CSV as storage. Powered by Typescript + async/await.
-
-> :zap: For node.js 7.6+
+Lightweight CRUD database, using CSV as storage. Powered by Typescript + async/await.
 
 Features :
 
 * complete CRUD API with model validation
-* json-like requests
+* object requests
 * Typescript typings
 * concurrency-ready
 
@@ -112,9 +110,9 @@ Adds data to CSV.
 
 * returns created occurences
 
-| Param | Type       | Description      |
-| ----- | ---------- | ---------------- |
-| data  | `Object[]` | data to be added |
+| Param | Type                | Description      |
+| ----- | ------------------- | ---------------- |
+| data  | `Object | Object[]` | data to be added |
 
 **Example**
 
@@ -123,7 +121,7 @@ Adds data to CSV.
 [{id: 3, name: "stevejobs", mail: "jobs@github.com"}]
 ```
 
-<a name="module_csvdb.add"></a>
+<a name="module_csvdb.delete"></a>
 
 ### db.delete(predicate) ⇒ `Promise<Object[]>`
 
