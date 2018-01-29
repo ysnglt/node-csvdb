@@ -3,6 +3,7 @@
   "linterOptions": { "exclude": ["bin"] },
   "rules": {
     "no-implicit-dependencies": [true, "dev"],
-    "ban-types": false
+    "ban-types": false,
+    "curly": false
   }
 }
