@@ -3,15 +3,7 @@
   "version": "0.9.2",
   "description": "lightweight CSV database",
   "main": "src/index.ts",
-  "keywords": [
-    "csv",
-    "database",
-    "db",
-    "crud",
-    "storage",
-    "flat file",
-    "file"
-  ],
+  "keywords": ["csv", "database", "db", "crud", "storage", "flat file", "file"],
   "repository": {
     "url": "https://github.com/ysnglt/node-csvdb"
   },
@@ -40,7 +32,7 @@
   "scripts": {
     "prepare": "gulp",
     "test": "mocha -r ts-node/register test/index.ts",
-    "posttest": "tslint --project .",
+    "lint": "tslint --project .",
     "format": "prettier --write {src,test}/**/*.ts"
   },
   "author": "ysnglt",
