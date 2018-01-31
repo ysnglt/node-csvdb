@@ -138,7 +138,6 @@ describe("database behavior - create | update | delete", () => {
 
   it("should edit filtered data", async () => {
     const db = await csvdb(EXISTINGFILE, MODEL);
-    db.edit({}, {});
     const editedValues = await db.edit({ foo: "a" }, { foo: "x", bar: "y" });
     const newValue = await db.get({ foo: "x" });
     const oldValue = await db.get({ foo: "a" });
