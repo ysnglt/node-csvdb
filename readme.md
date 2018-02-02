@@ -1,11 +1,11 @@
 # csv-database : node.js CSV database
 
-Lightweight CRUD database, using CSV as storage. Powered by Typescript + async/await.
+Lightweight CRUD database, using CSV files as a storage.
 
 Features :
 
 * complete CRUD API with model validation
-* native JS object requests
+* native JS objects manipulation
 * Typescript typings
 * concurrency-ready
 
@@ -17,7 +17,7 @@ Features :
 > await db.get({mail: "johndoe@github.com"});
 [ {id: 1, name: "johndoe", mail: "john@github.com"} ]
 
-> await db.add([{id: 2, name: "stevejobs", mail: "jobs@github.com"}]);
+> await db.add({id: 2, name: "stevejobs", mail: "jobs@github.com"});
 ```
 
 ## Installation
@@ -26,7 +26,7 @@ Features :
 
 ## API Reference
 
-* [csvdb<T>](#module_csvdb)
+* [csvdb](#module_csvdb)
   * [.get](#module_csvdb.get)
   * [.edit](#module_csvdb.edit)
   * [.add](#module_csvdb.add)
