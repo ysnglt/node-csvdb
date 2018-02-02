@@ -12,34 +12,20 @@ process
   .once("SIGTERM", () => process.exit(1));
 
 // lock middleware to ensure async/thread safety
-const lock = async (file: string, next) =>
-  new Promise((resolve, reject) => {
-    lockfile.lock(
-      file,
-      {
-        retries: {
-          retries: 500,
-          factor: 3,
-          minTimeout: 1 * 10,
-          maxTimeout: 60 * 1000,
-          randomize: true
-        }
-      },
-      async (err, release) => {
-        if (err) {
-          reject(err);
-        }
-
-        try {
-          await next();
-        } catch (err) {
-          reject(err);
-        }
-        release();
-        resolve();
-      }
-    );
+const lock = async (file: string, next) => {
+  const release = await lockfile.lock(file, {
+    retries: {
+      retries: 500,
+      factor: 3,
+      minTimeout: 1 * 10,
+      maxTimeout: 60 * 1000,
+      randomize: true
+    }
   });
+
+  await next();
+  release();
+};
 
 /** file i/o helpers */
 const getCsvStream = (file: string, delimiter: string) => {

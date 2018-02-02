@@ -3,13 +3,21 @@
   "version": "0.9.2",
   "description": "lightweight CSV database",
   "main": "src/index.ts",
-  "keywords": ["csv", "database", "db", "crud", "storage", "flat file", "file"],
+  "keywords": [
+    "csv",
+    "database",
+    "db",
+    "crud",
+    "storage",
+    "flat file",
+    "file"
+  ],
   "repository": {
     "url": "https://github.com/ysnglt/node-csvdb"
   },
   "dependencies": {
     "fast-csv": "^2.4.1",
-    "proper-lockfile": "^2.0.1",
+    "proper-lockfile": "^3.0.2",
     "tempy": "^0.2.1"
   },
   "devDependencies": {
