@@ -1,5 +1,7 @@
 # csv-database : node.js CSV database
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ysnglt/node-csvdb.svg)](https://greenkeeper.io/)
+
 Lightweight CRUD database, using CSV files as a storage.
 
 Features :
